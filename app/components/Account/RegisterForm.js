@@ -4,7 +4,9 @@ import { StyleSheet, View } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 import { validateEmail } from './../../utils/validations'
 
-export default function RegisterForm () {
+export default function RegisterForm (props) {
+    console.log({ props })
+    const  toastRef = props.toastRef;
     const [showPassword, setShowPassword] = useState(false)
     const [showRepeatPassword, setShowRepeatPassword] = useState(false)
     const [formData, setFormData] = useState(defaultFormValue)
@@ -13,19 +15,18 @@ export default function RegisterForm () {
         if(
         isEmpty(formData.email) || 
         isEmpty(formData.password) || 
-        isEmpty(formData.repeatPassword)){
-            console.log('TOdos los campos os obligatorios')
-        }else if(!visualViewport(formData.email)){
-            console.log('EL mail no es correcto')
+        isEmpty(formData.passwordRepeat)){
+            toastRef.current.show('Todos los campos son obligatorios')
+        }else if(!validateEmail(formData.email)){
+            toastRef.current.show('El email no es correcto')
         } else if(formData.password !== formData.repeatPassword){
-            console.log(`las contraseñas tiene que ser iguales`)
+            toastRef.current.show('Las contraseñas tienen que ser iguales')
         } else if(size(formdata.password) < 6){
-            console.log('minimo 6 chars')
+            toastRef.current.show('La contraseña tiene que tener al menos 6 caracteres')
         }else {
             console.log('ok')
         }
         console.log(formData)
-        console.log(validateEmail(formData.email))
     }
 
     const onChange = (e, type) => {

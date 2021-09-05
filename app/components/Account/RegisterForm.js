@@ -3,9 +3,9 @@ import { size, isEmpty } from 'lodash'
 import { StyleSheet, View } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 import { validateEmail } from './../../utils/validations'
+import * as firebase from 'firebase'
 
 export default function RegisterForm (props) {
-    console.log({ props })
     const  toastRef = props.toastRef;
     const [showPassword, setShowPassword] = useState(false)
     const [showRepeatPassword, setShowRepeatPassword] = useState(false)
@@ -19,14 +19,21 @@ export default function RegisterForm (props) {
             toastRef.current.show('Todos los campos son obligatorios')
         }else if(!validateEmail(formData.email)){
             toastRef.current.show('El email no es correcto')
-        } else if(formData.password !== formData.repeatPassword){
+        } else if(formData.password !== formData.passwordRepeat){
             toastRef.current.show('Las contraseñas tienen que ser iguales')
-        } else if(size(formdata.password) < 6){
+        } else if(size(formData.password) < 6){
             toastRef.current.show('La contraseña tiene que tener al menos 6 caracteres')
         }else {
-            console.log('ok')
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(formData.email, formData.password)
+                .then(() => {
+                console.log(`ok register`)
+                })
+                .catch(() => {
+                    console.log(`fail register`)
+                })
         }
-        console.log(formData)
     }
 
     const onChange = (e, type) => {
@@ -92,8 +99,8 @@ function defaultFormValue() {
     return {
       email: "",
       password: "",
-      repeatPassword: "",
-    };
+      passwordRepeat: "",
+    }
   }
 
 const styles = StyleSheet.create({

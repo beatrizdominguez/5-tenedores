@@ -1,17 +1,27 @@
 import React, {useState} from 'react'
-import { StyleSheet, View, ActivityIndicator, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 
 export default function RegisterForm () {
     const [showPassword, setShowPassword] = useState(false)
     const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+    const [formData, setFormData] = useState(defaultFormValue)
     
-    
+    const onSubmit = () => {
+        console.log(formData)
+    }
+
+    const onChange = (e, type) => {
+        const value = e.nativeEvent.text
+        setFormData({...formData, [type]: value})
+    }
+
  return (
     <View style={styles.formContainer}>
         <Input
             placeholder='Correo electrónico'
             containerStyle={styles.inputForm}
+            onChange={(e) => onChange(e, 'email')}
             rightIcon={
                 <Icon
                     type="material-community"
@@ -25,6 +35,7 @@ export default function RegisterForm () {
             containerStyle={styles.inputForm}
             password={true}
             secureTextEntry={showPassword ? false : true}
+            onChange={(e) => onChange(e, 'password')}
             rightIcon={
                 <Icon
                     type="material-community"
@@ -39,6 +50,7 @@ export default function RegisterForm () {
             containerStyle={styles.inputForm}
             password={true}
             secureTextEntry={showRepeatPassword ? false : true}
+            onChange={(e) => onChange(e, 'passwordRepeat')}
             rightIcon={
                 <Icon
                     type="material-community"
@@ -52,11 +64,19 @@ export default function RegisterForm () {
             title="Unirse"
             containerStyle={styles.btnContainerRegister}
             buttonStyle={styles.btnRegister}
-            // onPress={onSubmit}
+            onPress={onSubmit}
         />
     </View>
  )
 }
+
+function defaultFormValue() {
+    return {
+      email: "",
+      password: "",
+      repeatPassword: "",
+    };
+  }
 
 const styles = StyleSheet.create({
     formContainer: {

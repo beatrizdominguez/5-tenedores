@@ -4,9 +4,11 @@ import { StyleSheet, View } from 'react-native'
 import { Input, Button, Icon } from 'react-native-elements'
 import { validateEmail } from './../../utils/validations'
 import * as firebase from 'firebase'
+import { useNavigation } from '@react-navigation/native'
 
 export default function RegisterForm (props) {
-    const  toastRef = props.toastRef;
+    const navigation = useNavigation()
+    const  toastRef = props.toastRef
     const [showPassword, setShowPassword] = useState(false)
     const [showRepeatPassword, setShowRepeatPassword] = useState(false)
     const [formData, setFormData] = useState(defaultFormValue)
@@ -28,10 +30,12 @@ export default function RegisterForm (props) {
                 .auth()
                 .createUserWithEmailAndPassword(formData.email, formData.password)
                 .then(() => {
-                console.log(`ok register`)
+                    console.log(`ok register`)
+                    navigation.navigate('account')
                 })
                 .catch(() => {
                     console.log(`fail register`)
+                    toastRef.current.show('El email ya esta en uso, pruebe con otro')
                 })
         }
     }

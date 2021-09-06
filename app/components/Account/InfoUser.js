@@ -6,16 +6,14 @@ import * as Permissions from "expo-permissions"
 import * as ImagePicker from "expo-image-picker"
 
 export default function InfoUser (props) {
-    const { userInfo, toastRef } = props
+    const { userInfo, toastRef, setLoading, setLoadingText } = props
     const { photoURL, displayName, email, uid } = userInfo
 
     const changeAvatar = async () => {
       const resultPermission = await Permissions.askAsync(
         Permissions.CAMERA_ROLL
       )
-      console.log({ resultPermission })
       const resultPermissionLibrary = resultPermission.permissions.mediaLibrary.status;
-      console.log({ resultPermissionCamera: resultPermissionLibrary })
 
       if (resultPermissionLibrary === "denied") {
         toastRef.current.show("Es necesario aceptar los permisos de la galeria");
@@ -39,6 +37,9 @@ export default function InfoUser (props) {
     }
 
       const uploadImage = async (uri) => {
+        setLoadingText("Actualizando Avatar")
+        setLoading(true)
+
         const response = await fetch(uri)
         const blob = await response.blob()
 
@@ -57,7 +58,8 @@ export default function InfoUser (props) {
               photoURL: response,
             };
             await firebase.auth().currentUser.updateProfile(update)
-            setLoading(false);
+            setLoading(false)
+            setLoadingText('')
           })
           .catch(() => {
             toastRef.current.show("Error al actualizar el avatar.")

@@ -2,19 +2,22 @@ import React, {useState} from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { map } from 'lodash'
+import Modal from './Modal'
 
 export default function AccountOptions (props) {
     const { userInfo, toastRef } = props
+    const [showModal, setShowModal] = useState(false)
+    
     
     const selectComponent = (componentName) => {
       console.log(componentName)
+      setShowModal(true)
     }
     
     const menuOptions = generateOptions(selectComponent)
 
       return (
         <View style={styles.viewUserInfo}>
-          
             {map(menuOptions, (menu, index) => (
               <ListItem 
               key={index} 
@@ -33,6 +36,12 @@ export default function AccountOptions (props) {
               onPress={menu.onPress}
               />
             ))}
+            <Modal
+              isVisible={showModal}
+              setIsVisible={setShowModal}
+            >
+              <Text>hola mundo</Text>
+            </Modal>
         </View>
       )
 }

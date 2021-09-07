@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 
+const widthScreen = Dimensions.get("window").width;
 
 export default function AddRestaurantForm(props) {
     const { toastRef, setIsLoading } = props;
@@ -22,7 +23,9 @@ export default function AddRestaurantForm(props) {
 
     return (
         <ScrollView style={styles.scrollView}>
-            <Text>{imagesSelected.toString()}</Text>
+            <ImageRestaurant
+                imagenRestaurant={imagesSelected[0]}
+            />
             <FormAdd
                 setName={setName}
                 setAdress={setAddress}
@@ -40,6 +43,23 @@ export default function AddRestaurantForm(props) {
             />
         </ScrollView>
     )
+}
+
+function ImageRestaurant(props) {
+    const { imagenRestaurant } = props;
+
+    return (
+        <View style={styles.viewPhoto}>
+            <Image
+                source={
+                    imagenRestaurant
+                        ? { uri: imagenRestaurant }
+                        : require("../../../assets/img/no-image.png")
+                }
+                style={{ width: widthScreen, height: 200 }}
+            />
+        </View>
+    );
 }
 
 function FormAdd(props) {
@@ -134,7 +154,7 @@ function UploadImage(props) {
 
     return (
         <View style={styles.viewImages}>
-            {size(imagesSelected) < 4 && (
+            {size(imagesSelected) < 5 && (
                 <Icon
                     type="material-community"
                     name="camera"
@@ -143,14 +163,17 @@ function UploadImage(props) {
                     onPress={imageSelect}
                 />
             )}
-            {map(imagesSelected, (imageUri, index) => (
-                <Avatar
-                    key={index}
-                    style={styles.miniatureStyle}
-                    source={{ uri: imageUri }}
-                    onPress={() => removeImage(imageUri)}
-                />
-            ))}
+            {map(imagesSelected, (imageUri, index) => {
+                if (index !== 0) (
+                    <Avatar
+                        key={index}
+                        style={styles.miniatureStyle}
+                        source={{ uri: imageUri }}
+                        onPress={() => removeImage(imageUri)}
+                    />
+                )
+            }
+            )}
         </View>
     );
 }

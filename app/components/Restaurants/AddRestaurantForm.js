@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, View, ScrollView, Alert, Dimensions, Text } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
+import { useNavigation } from '@react-navigation/native'
+import * as Permissions from "expo-permissions";
+import * as ImagePicker from "expo-image-picker";
 
 
 export default function AddRestaurantForm(props) {
@@ -21,6 +23,9 @@ export default function AddRestaurantForm(props) {
                 setName={setName}
                 setAdress={setAddress}
                 setDescription={setDescription}
+            />
+            <UploadImage
+                toastRef={toastRef}
             />
             <Button
                 title='Crear restaurante'
@@ -69,6 +74,54 @@ function FormAdd(props) {
     );
 }
 
+function UploadImage(props) {
+    const { toastRef, imagesSelected, setImagesSelected } = props;
+
+    const imageSelect = async () => {
+        const resultPermission = await Permissions.askAsync(
+            Permissions.CAMERA_ROLL
+        )
+
+        const resultPermissionLibrary = resultPermission.permissions.mediaLibrary.status;
+
+        if (resultPermissionLibrary === "denied") {
+            toastRef.current.show(
+                "Es necesario aceptar los permisos de la galeria, si los has rechazado tienes que ir ha ajustes y activarlos manualmente.",
+                3000
+            );
+        } else {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3],
+            })
+
+            if(result.cancelled){
+                toastRef.current.show("Has cerrado la selección de imagen");
+              }else {
+                  console.log(`la imagen está seleccionada`)
+                // uploadImage(result.uri)
+                // .then(() => {
+                //   updatePhotoUrl()
+                // })
+                // .catch(() => {
+                //   toastRef.current.show("Error al actualizar el avatar.");
+                // })
+              }
+        }
+    }
+
+    return (
+        <View style={styles.viewImages}>
+            <Icon
+                type="material-community"
+                name="camera"
+                color="#7a7a7a"
+                containerStyle={styles.containerIcon}
+                onPress={imageSelect}
+            />
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     scrollView: {

@@ -1,24 +1,42 @@
 import React, { useState, useEffect } from "react";
+import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, View, ScrollView, Alert, Dimensions, Text } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 
 
 export default function AddRestaurantForm(props) {
-    const { toastRef, setIsLoading, navigation } = props;
+    const { toastRef, setIsLoading } = props;
+    const [name, setName] = useState('')
+    const [address, setAddress] = useState('')
+    const [description, setDescription] = useState('')
+    const navigation = useNavigation()
 
+    const createRestaurant = () => {
+        console.log(`create`)
+    }
 
     return (
         <ScrollView style={styles.scrollView}>
-            <FormAdd />
+            <FormAdd
+                setName={setName}
+                setAdress={setAddress}
+                setDescription={setDescription}
+            />
+            <Button
+                title='Crear restaurante'
+                buttonStyle={styles.btnAddRestaurant}
+                onPressIn={createRestaurant}
+            />
         </ScrollView>
     )
 }
 
 function FormAdd(props) {
+    console.log({ props })
     const {
-        setRestaurantName,
-        setRestaurantAddress,
-        setRestaurantDescription,
+        setName,
+        setAddress,
+        setDescription,
         setIsVisibleMap,
         locationRestaurant,
     } = props;
@@ -28,24 +46,24 @@ function FormAdd(props) {
             <Input
                 placeholder="Nombre del restaurante"
                 containerStyle={styles.input}
-                // onChange={(e) => setRestaurantName(e.nativeEvent.text)}
+                onChange={(e) => setName(e.nativeEvent.text)}
             />
             <Input
                 placeholder="Dirección"
                 containerStyle={styles.input}
-                // onChange={(e) => setRestaurantAddress(e.nativeEvent.text)}
-                // rightIcon={{
-                //     type: "material-community",
-                //     name: "google-maps",
-                //     color: locationRestaurant ? "#00a680" : "#c2c2c2",
-                //     onPress: () => setIsVisibleMap(true),
-                // }}
+                onChange={(e) => setAddress(e.nativeEvent.text)}
+            // rightIcon={{
+            //     type: "material-community",
+            //     name: "google-maps",
+            //     color: locationRestaurant ? "#00a680" : "#c2c2c2",
+            //     onPress: () => setIsVisibleMap(true),
+            // }}
             />
             <Input
                 placeholder="Descripcion del restaurante"
                 multiline={true}
                 inputContainerStyle={styles.textArea}
-                // onChange={(e) => setRestaurantDescription(e.nativeEvent.text)}
+                onChange={(e) => setDescription(e.nativeEvent.text)}
             />
         </View>
     );

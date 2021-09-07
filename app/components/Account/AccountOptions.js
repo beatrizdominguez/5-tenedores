@@ -7,7 +7,7 @@ import ChangeDisplayNameForm from './ChangeDisplayNameForm'
 import ChangeEmailForm from './ChangeEmailForm'
 
 export default function AccountOptions (props) {
-    const { userInfo, toastRef, setReloadUserInfo } = props
+    const { userInfo, toastRef, triggerReloadUser } = props
     const [showModal, setShowModal] = useState(false)
     const [renderComponent, setRenderComponent] = useState(null)
     
@@ -19,7 +19,7 @@ export default function AccountOptions (props) {
               displayName={userInfo.displayName}
               setShowModal={setShowModal}
               // toastRef={toastRef}
-              setReloadUserInfo={setReloadUserInfo}
+              triggerReloadUser={triggerReloadUser}
             />
           );
           setShowModal(true);
@@ -29,8 +29,8 @@ export default function AccountOptions (props) {
             <ChangeEmailForm
               email={userInfo.email}
               setShowModal={setShowModal}
-              // toastRef={toastRef}
-              setReloadUserInfo={setReloadUserInfo}
+              toastRef={toastRef}
+              triggerReloadUser={triggerReloadUser}
             />
           );
           setShowModal(true);

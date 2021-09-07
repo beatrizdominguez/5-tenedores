@@ -4,7 +4,7 @@ import { Input, Button } from 'react-native-elements'
 import * as firebase from 'firebase'
 
 export default function ChangeDisplayNameForm (props) {
-    const { displayName, setShowModal, toastRef, setReloadUserInfo } = props
+    const { displayName, setShowModal, toastRef, triggerReloadUser } = props
     const [newDisplayName, setNewDisplayName] = useState(null)
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -32,7 +32,7 @@ export default function ChangeDisplayNameForm (props) {
                 .currentUser.updateProfile(update)
                 .then(() => {
                     setLoading(false);
-                    setReloadUserInfo(true)
+                    triggerReloadUser()
                     setShowModal(false)
                 })
                 .catch(() => {

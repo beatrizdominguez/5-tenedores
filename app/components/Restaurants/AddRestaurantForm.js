@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Alert, Dimensions, Text } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
-import { map } from 'lodash'
+import { map, size } from 'lodash'
 import { useNavigation } from '@react-navigation/native'
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
@@ -112,13 +112,15 @@ function UploadImage(props) {
 
     return (
         <View style={styles.viewImages}>
-            <Icon
-                type="material-community"
-                name="camera"
-                color="#7a7a7a"
-                containerStyle={styles.containerIcon}
-                onPress={imageSelect}
-            />
+            {size(imagesSelected) < 4 && (
+                <Icon
+                    type="material-community"
+                    name="camera"
+                    color="#7a7a7a"
+                    containerStyle={styles.containerIcon}
+                    onPress={imageSelect}
+                />
+            )}
             {map(imagesSelected, (imageUri, index) => (
                 <Avatar
                     key={index}

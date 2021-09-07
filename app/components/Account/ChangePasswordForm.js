@@ -9,7 +9,7 @@ export default function ChangePasswordForm(props) {
     const { setShowModal, toastRef } = props;
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState(defualtValue());
-    const [errors, setErrors] = useState({other: 'jemplos'});
+    const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
     const onChange = (e, type) => {
@@ -56,6 +56,8 @@ export default function ChangePasswordForm(props) {
                             setLoading(false)
                             setShowPassword(false)
                             setShowModal(false)
+                            // firebase te tira de todos los dispositivos que eses conectado
+                            // firebase.auth().signOut()
                         })
                         .catch(() => {
                             setLoading(false)

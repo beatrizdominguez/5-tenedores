@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Alert, Dimensions, Text } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
+import { map } from 'lodash'
 import { useNavigation } from '@react-navigation/native'
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
@@ -13,7 +14,7 @@ export default function AddRestaurantForm(props) {
     const [description, setDescription] = useState('')
     const navigation = useNavigation()
     const [imagesSelected, setImagesSelected] = useState([])
-    
+
 
     const createRestaurant = () => {
         console.log(`create`)
@@ -100,12 +101,12 @@ function UploadImage(props) {
                 aspect: [4, 3],
             })
 
-            if(result.cancelled){
+            if (result.cancelled) {
                 toastRef.current.show("Has cerrado la selección de imagen");
-              }else {
-                  console.log(`la imagen está seleccionada`)
-                  setImagesSelected([...imagesSelected, result.uri])
-              }
+            } else {
+                console.log(`la imagen está seleccionada`)
+                setImagesSelected([...imagesSelected, result.uri])
+            }
         }
     }
 
@@ -118,6 +119,13 @@ function UploadImage(props) {
                 containerStyle={styles.containerIcon}
                 onPress={imageSelect}
             />
+            {map(imagesSelected, (imageUri, index) => (
+                <Avatar
+                    key={index}
+                    style={styles.miniatureStyle}
+                    source={{ uri: imageUri }}
+                />
+            ))}
         </View>
     );
 }

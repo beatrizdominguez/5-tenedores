@@ -164,14 +164,16 @@ function UploadImage(props) {
                 />
             )}
             {map(imagesSelected, (imageUri, index) => {
-                if (index !== 0) (
-                    <Avatar
-                        key={index}
-                        style={styles.miniatureStyle}
-                        source={{ uri: imageUri }}
-                        onPress={() => removeImage(imageUri)}
-                    />
-                )
+                if (index !== 0) {
+                    return (
+                        <Avatar
+                            key={index}
+                            style={styles.miniatureStyle}
+                            source={{ uri: imageUri }}
+                            onPress={() => removeImage(imageUri)}
+                        />
+                    )
+                }
             }
             )}
         </View>

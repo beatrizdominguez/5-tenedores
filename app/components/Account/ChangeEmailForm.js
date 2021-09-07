@@ -2,21 +2,41 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Button } from "react-native-elements";
 import * as firebase from "firebase";
+import { validateEmail } from "../../utils/validations";
 
 export default function ChangeEmailForm(props) {
   const { email, setShowModal, toastRef, setReloadUserInfo } = props;
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState(defaultValue())
   const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState({})
+  
   const disabled = !formData.email
   
   const onChange = (e, type) => {
+      setErrors({})
       setFormData({...formData, [type]: e.nativeEvent.text})
   }
   
   const onSubmit = () => {
-      console.log({ formData })
-  }
+    setErrors({});
+    if (!formData.email || email === formData.email) {
+      setErrors({
+        email: "El email no ha cambiado.",
+      });
+    } else if (!validateEmail(formData.email)) {
+      setErrors({
+        email: "Email incorrecto.",
+      });
+    } else if (!formData.password) {
+      setErrors({
+        password: "La contraseña no puede estar vacia.",
+      });
+    } else {
+      setIsLoading(true);
+      console.log(`all ok`)
+    }
+  };
 
   return (
     <View style={styles.view}>
@@ -30,7 +50,7 @@ export default function ChangeEmailForm(props) {
                 color: "#c2c2c2",
             }}
             onChange={(e) => onChange(e, "email")}
-            // errorMessage={errors.email}
+            errorMessage={errors.email}
         />
         {/* firebase pide la contraña para hacer esto, sino no valida y no lo hace */}
          <Input
@@ -45,7 +65,7 @@ export default function ChangeEmailForm(props) {
                 onPress: () => setShowPassword(!showPassword)
             }}
             onChange={(e) => onChange(e, "password")}
-            // errorMessage={errors.password}
+            errorMessage={errors.password}
         />
         <Button
             title="Cambiar email"

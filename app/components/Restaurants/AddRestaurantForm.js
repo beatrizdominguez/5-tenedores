@@ -12,6 +12,8 @@ export default function AddRestaurantForm(props) {
     const [address, setAddress] = useState('')
     const [description, setDescription] = useState('')
     const navigation = useNavigation()
+    const [imagesSelected, setImagesSelected] = useState([])
+    
 
     const createRestaurant = () => {
         console.log(`create`)
@@ -19,6 +21,7 @@ export default function AddRestaurantForm(props) {
 
     return (
         <ScrollView style={styles.scrollView}>
+            <Text>{imagesSelected.toString()}</Text>
             <FormAdd
                 setName={setName}
                 setAdress={setAddress}
@@ -26,6 +29,8 @@ export default function AddRestaurantForm(props) {
             />
             <UploadImage
                 toastRef={toastRef}
+                imagesSelected={imagesSelected}
+                setImagesSelected={setImagesSelected}
             />
             <Button
                 title='Crear restaurante'
@@ -99,13 +104,7 @@ function UploadImage(props) {
                 toastRef.current.show("Has cerrado la selección de imagen");
               }else {
                   console.log(`la imagen está seleccionada`)
-                // uploadImage(result.uri)
-                // .then(() => {
-                //   updatePhotoUrl()
-                // })
-                // .catch(() => {
-                //   toastRef.current.show("Error al actualizar el avatar.");
-                // })
+                  setImagesSelected([...imagesSelected, result.uri])
               }
         }
     }

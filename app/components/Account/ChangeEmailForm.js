@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Input, Button } from "react-native-elements";
 import * as firebase from "firebase";
 
 export default function ChangeEmailForm(props) {
   const { email, setShowModal, toastRef, setReloadUserInfo } = props;
   const [showPassword, setShowPassword] = useState(false)
+  const [formData, setFormData] = useState(defaultValue())
   const [loading, setLoading] = useState(false)
+  const disabled = !formData.email
+  
+  const onChange = (e, type) => {
+      setFormData({...formData, [type]: e.nativeEvent.text})
+  }
   
   const onSubmit = () => {
-      console.log(`submit form`)
+      console.log({ formData })
   }
 
   return (
@@ -23,7 +29,7 @@ export default function ChangeEmailForm(props) {
                 name: "at",
                 color: "#c2c2c2",
             }}
-            // onChange={(e) => onChange(e, "email")}
+            onChange={(e) => onChange(e, "email")}
             // errorMessage={errors.email}
         />
         {/* firebase pide la contraña para hacer esto, sino no valida y no lo hace */}
@@ -38,13 +44,14 @@ export default function ChangeEmailForm(props) {
                 color: "#c2c2c2",
                 onPress: () => setShowPassword(!showPassword)
             }}
-            // onChange={(e) => onChange(e, "password")}
+            onChange={(e) => onChange(e, "password")}
             // errorMessage={errors.password}
         />
         <Button
             title="Cambiar email"
             containerStyle={styles.btnContainer}
             buttonStyle={styles.btn}
+            disabled={disabled}
             onPress={onSubmit}
             loading={loading}
         />
@@ -52,6 +59,13 @@ export default function ChangeEmailForm(props) {
   );
 }
 
+function defaultValue() {
+    return {
+      email: "",
+      password: "",
+    };
+  }
+  
 
 const styles = StyleSheet.create({
   view: {

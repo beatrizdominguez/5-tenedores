@@ -134,22 +134,47 @@ function Map(props) {
                     3000
                 );
             } else {
-                console.log(`todo ok`)
-                const loc = await Location.getCurrentPositionAsync({});
-                console.log({ loc })
+                // const loc = await Location.getCurrentPositionAsync({});
+                // console.log({ loc })
                 setLocation({
-                    latitude: loc.coords.latitude,
-                    longitude: loc.coords.longitude,
-                    latitudeDelta: 0.001,
-                    longitudeDelta: 0.001, latitu
+                    latitude: 41.3995345,
+                    longitude: 2.1909796,
+                    latitudeDelta: 0.003,
+                    longitudeDelta: 0.003,
                 })
+                // setLocation({
+                //     latitude: loc.coords.latitude,
+                //     longitude: loc.coords.longitude,
+                //     latitudeDelta: 0.001,
+                //     longitudeDelta: 0.001, 
+                // })
             }
         })()
     }, [])
 
     return (
         <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
-            <Text>aaa</Text>
+            <View>
+                {location && (
+                    <MapView
+                        style={styles.mapStyle}
+                        initialRegion={location}
+                        showsUserLocation={true}
+                        onRegionChange={(region) => {
+                            setLocation(region)
+                        }}
+                    >
+                        <MapView.Marker
+                            coordinate={{
+                                latitude: location.latitude,
+                                longitude: location.longitude,
+                            }}
+                            draggable
+                        />
+                    </MapView>
+                )
+                }
+            </View>
         </Modal>
     );
 }

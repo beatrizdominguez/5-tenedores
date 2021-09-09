@@ -40,8 +40,30 @@ export default function AddRestaurantForm(props) {
             setIsLoading(true)
             uploadImageStorage()
                 .then((response) => {
-                    console.log({ response })
-                    setIsLoading(false)
+                    console.log({ imgResponse: response })
+                    db.collection("restaurants")
+                        .add({
+                            name,
+                            address,
+                            description,
+                            location: locationRestaurant,
+                            images: response,
+                            rating: 0,
+                            ratingTotal: 0,
+                            quantityVoting: 0,
+                            createAt: new Date(),
+                            createBy: firebase.auth().currentUser.uid,
+                        })
+                        .then(() => {
+                            setIsLoading(false);
+                        })
+                        .catch((error) => {
+                            console.log({ error })
+                            setIsLoading(false);
+                            toastRef.current.show(
+                                "Error al subir el restaurante, intentelo más tarde"
+                            );
+                        });
                 })
                 .catch(() => {
                     setIsLoading(false);

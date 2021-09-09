@@ -24,7 +24,15 @@ export default function AddRestaurantForm(props) {
 
 
     const createRestaurant = () => {
-        console.log(`create`)
+        if (!naeme || !address || !restaurantDescription) {
+            toastRef.current.show("Todos los campos del formulario son obligatorios");
+          } else if (size(imagesSelected) === 0) {
+            toastRef.current.show("El restaurante tiene que tener almenos una foto");
+          } else if (!locationRestaurant) {
+            toastRef.current.show("Tienes que localizar el restaurnate en el mapa");
+          } else {
+              console.log(`upload`)
+          }
     }
 
     return (
@@ -38,6 +46,7 @@ export default function AddRestaurantForm(props) {
                 setDescription={setDescription}
                 isVisibleMap={isVisibleMap}
                 setIsVisibleMap={setIsVisibleMap}
+                locationRestaurant={locationRestaurant}
             />
             <UploadImage
                 toastRef={toastRef}

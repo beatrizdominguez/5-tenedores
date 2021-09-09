@@ -56,6 +56,7 @@ export default function AddRestaurantForm(props) {
                         })
                         .then(() => {
                             setIsLoading(false);
+                            navigation.navigate("restaurants")
                         })
                         .catch((error) => {
                             console.log({ error })

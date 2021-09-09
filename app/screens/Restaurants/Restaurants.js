@@ -1,21 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from '@react-navigation/native'
 import { Icon } from "react-native-elements";
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
-import { useNavigation } from '@react-navigation/native'
+import "firebase/firestore";
 
+const db = firebase.firestore(firebaseApp);
 
+const limitRestaurants = 3
 export default function Restaurants() {
     const [user, setUser] = useState(null)
     const navigation = useNavigation();
-
+    const [totalRestaurants, setTotalRestaurants] = useState(0)
+    console.log({ totalRestaurants })
 
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged((userInfo) => {
             setUser(userInfo)
         })
+    }, [])
+
+    useEffect(() => {
+        db.collection('restaurants').get().then((snap) => {
+            setTotalRestaurants(snap.size)
+            console.log({ count: snap.size })
+        })
+
+        const resultRestaurants = [];
+
+        db.collection('restaurants')
+            .orderBy("createAt", "desc")
+            .limit(limitRestaurants)
+            .get()
+            .then((response) => {
+                console.log({ response })
+            })
+
     }, [])
 
     return (

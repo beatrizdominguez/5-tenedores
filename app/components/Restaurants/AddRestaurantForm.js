@@ -5,7 +5,9 @@ import { map, size, filter } from 'lodash'
 import { useNavigation } from '@react-navigation/native'
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import Modal from "./../Account/Modal";
+import MapView from "react-native-maps";
 
 
 const widthScreen = Dimensions.get("window").width;
@@ -115,6 +117,35 @@ function Map(props) {
         setLocationRestaurant,
         toastRef,
     } = props;
+    const [location, setLocation] = useState(null)
+
+
+    useEffect(() => {
+        (async () => {
+            const resultPermissions = await Permissions.askAsync(
+                Permissions.LOCATION
+            )
+
+            const statusPermissions = resultPermissions.permissions.location.status;
+
+            if (statusPermissions !== "granted") {
+                toastRef.current.show(
+                    "Tienes que aceptar los permisos de localizacion para crear un restaurante",
+                    3000
+                );
+            } else {
+                console.log(`todo ok`)
+                const loc = await Location.getCurrentPositionAsync({});
+                console.log({ loc })
+                setLocation({
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001, latitu
+                })
+            }
+        })()
+    }, [])
 
     return (
         <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>

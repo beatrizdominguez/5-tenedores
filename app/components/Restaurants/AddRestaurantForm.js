@@ -8,32 +8,73 @@ import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 import Modal from "./../Account/Modal";
 import MapView from "react-native-maps";
+import uuid from 'random-uuid-v4'
 
+import { firebaseApp } from "../../utils/firebase";
+import firebase from "firebase/app";
+import "firebase/storage";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseApp);
 
 const widthScreen = Dimensions.get("window").width;
 
 export default function AddRestaurantForm(props) {
     const { toastRef, setIsLoading } = props;
+    const navigation = useNavigation()
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [description, setDescription] = useState('')
-    const navigation = useNavigation()
     const [imagesSelected, setImagesSelected] = useState([])
     const [isVisibleMap, setIsVisibleMap] = useState(false)
     const [locationRestaurant, setLocationRestaurant] = useState(null)
 
 
     const createRestaurant = () => {
-        if (!naeme || !address || !restaurantDescription) {
+        if (!name || !address || !description) {
             toastRef.current.show("Todos los campos del formulario son obligatorios");
-          } else if (size(imagesSelected) === 0) {
+        } else if (size(imagesSelected) === 0) {
             toastRef.current.show("El restaurante tiene que tener almenos una foto");
-          } else if (!locationRestaurant) {
+        } else if (!locationRestaurant) {
             toastRef.current.show("Tienes que localizar el restaurnate en el mapa");
-          } else {
-              console.log(`upload`)
-          }
+        } else {
+            setIsLoading(true)
+            uploadImageStorage()
+                .then((response) => {
+                    console.log({ response })
+                    setIsLoading(false)
+                })
+                .catch(() => {
+                    setIsLoading(false);
+                    toastRef.current.show(
+                        "Error al subir el restaurante, intentelo más tarde"
+                    );
+                });
+        }
     }
+
+    const uploadImageStorage = async () => {
+        const imageBlob = [];
+
+        await Promise.all(
+            map(imagesSelected, async (image) => {
+                const response = await fetch(image);
+                const blob = await response.blob();
+                // si el usuario no está logueado, no puede hacer eso, FIrebase te dice que no tienes permisos
+                const ref = firebase.storage().ref("restaurants").child(uuid());
+                await ref.put(blob).then(async (result) => {
+                    await firebase
+                        .storage()
+                        .ref(`restaurants/${result.metadata.name}`)
+                        .getDownloadURL()
+                        .then((photoUrl) => {
+                            imageBlob.push(photoUrl);
+                        });
+                });
+            })
+        );
+
+        return imageBlob;
+    };
 
     return (
         <ScrollView style={styles.scrollView}>
@@ -42,7 +83,7 @@ export default function AddRestaurantForm(props) {
             />
             <FormAdd
                 setName={setName}
-                setAdress={setAddress}
+                setAddress={setAddress}
                 setDescription={setDescription}
                 isVisibleMap={isVisibleMap}
                 setIsVisibleMap={setIsVisibleMap}

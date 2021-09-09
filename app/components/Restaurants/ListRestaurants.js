@@ -24,6 +24,7 @@ export default function ListRestaurants(props) {
                     renderItem={(restaurant) => (
                         <Restaurant
                             restaurant={restaurant}
+                            navigation={navigation}
                         ></Restaurant>
                     )}
                     onEndReachedThreshold={0.5}
@@ -42,13 +43,17 @@ export default function ListRestaurants(props) {
 }
 
 function Restaurant(props) {
-    const { restaurant } = props
-    const { name, images, address, description } = restaurant.item
+    const { restaurant, navigation } = props
+    const { id, name, images, address, description } = restaurant.item
     const imageRestaurant = images[0]
+
+    const goToRestaurant = () => {
+        navigation.navigate('restaurant', { id, name })
+    }
 
     return (
         <TouchableOpacity
-            onPressIn={() => console.log('')}
+            onPressIn={goToRestaurant}
         >
             <View style={styles.viewRestaurant}>
                 <View style={styles.imageRestaurant}>

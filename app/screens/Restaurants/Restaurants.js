@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, Text, View } from "react-native";
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { Icon } from "react-native-elements";
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
@@ -19,16 +19,7 @@ export default function Restaurants() {
     const [startRestaurant, setStartRestaurant] = useState(0)
     const [isLoading, setIsLoading] = useState(false)
 
-
-
-
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged((userInfo) => {
-            setUser(userInfo)
-        })
-    }, [])
-
-    useEffect(() => {
+    useFocusEffect(useCallback(() => {
         db.collection('restaurants').get().then((snap) => {
             setTotalRestaurants(snap.size)
         })
@@ -49,7 +40,13 @@ export default function Restaurants() {
                 }
                 setRestaurants(resultRestaurants)
             })
+    }))
 
+
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged((userInfo) => {
+            setUser(userInfo)
+        })
     }, [])
 
     const handleLoadMore = () => {

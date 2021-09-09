@@ -12,8 +12,10 @@ const limitRestaurants = 3
 export default function Restaurants() {
     const [user, setUser] = useState(null)
     const navigation = useNavigation();
+    const [restaurants, setRestaurants] = useState([])
     const [totalRestaurants, setTotalRestaurants] = useState(0)
-    console.log({ totalRestaurants })
+    const [startRestaurant, setStartRestaurant] = useState(0)
+
 
 
     useEffect(() => {
@@ -25,7 +27,6 @@ export default function Restaurants() {
     useEffect(() => {
         db.collection('restaurants').get().then((snap) => {
             setTotalRestaurants(snap.size)
-            console.log({ count: snap.size })
         })
 
         const resultRestaurants = [];
@@ -35,7 +36,14 @@ export default function Restaurants() {
             .limit(limitRestaurants)
             .get()
             .then((response) => {
-                console.log({ response })
+                setStartRestaurant(response.docs[response.docs.length - 1])
+
+                for (const doc of response.docs) {
+                    const restaurant = doc.data()
+                    restaurant.id = doc.id;
+                    resultRestaurants.push(restaurant)
+                }
+                setRestaurants(resultRestaurants)
             })
 
     }, [])

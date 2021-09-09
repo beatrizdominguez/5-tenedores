@@ -9,7 +9,8 @@ import ListRestaurants from "../../components/Restaurants/ListRestaurants";
 
 const db = firebase.firestore(firebaseApp);
 
-const limitRestaurants = 3
+const limitRestaurants = 10
+
 export default function Restaurants() {
     const [user, setUser] = useState(null)
     const navigation = useNavigation();

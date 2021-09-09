@@ -40,10 +40,35 @@ export default function ListRestaurants(props) {
 
 function Restaurant(props) {
     const { restaurant } = props
+    const { name, images, address, description } = restaurant.item
+    const imageRestaurant = images[0]
+
     return (
-        <View>
-            <Text>restaurante</Text>
-        </View>
+        <TouchableOpacity
+            onPressIn={() => console.log('')}
+        >
+            <View style={styles.viewRestaurant}>
+                <View style={styles.imageRestaurant}>
+                    <Image
+                        resizeMode="cover"
+                        PlaceholderContent={<ActivityIndicator color="fff" />}
+                        source={
+                            imageRestaurant
+                                ? { uri: imageRestaurant }
+                                : require("../../../assets/img/no-image.png")
+                        }
+                        style={styles.imageRestaurant}
+                    />
+                </View>
+                <View>
+                    <Text style={styles.restaurantName}>{name}</Text>
+                    <Text style={styles.restaurantAddress}>{address}</Text>
+                    <Text style={styles.restaurantDescription}>
+                    {description.substr(0, 60)}...
+                    </Text>
+                </View>
+            </View>
+        </TouchableOpacity>
     )
 }
 

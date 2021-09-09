@@ -20,6 +20,8 @@ export default function AddRestaurantForm(props) {
     const navigation = useNavigation()
     const [imagesSelected, setImagesSelected] = useState([])
     const [isVisibleMap, setIsVisibleMap] = useState(false)
+    const [locationRestaurant, setLocationRestaurant] = useState(null)
+
 
     const createRestaurant = () => {
         console.log(`create`)
@@ -50,6 +52,8 @@ export default function AddRestaurantForm(props) {
             <Map
                 isVisibleMap={isVisibleMap}
                 setIsVisibleMap={setIsVisibleMap}
+                setLocationRestaurant={setLocationRestaurant}
+                toastRef={toastRef}
             ></Map>
         </ScrollView>
     )
@@ -152,6 +156,12 @@ function Map(props) {
         })()
     }, [])
 
+    const confirmLocation = () => {
+        setLocationRestaurant(location)
+        toastRef.current.show('Localización guardada con éxito')
+        setIsVisibleMap(false)
+    }
+
     return (
         <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
             <View>
@@ -178,6 +188,7 @@ function Map(props) {
                         title='Guardar ubicación'
                         containerStyle={styles.viewMapBtnContainerSave}
                         buttonStyle={styles.viewMapBtnSave}
+                        onPressIn={confirmLocation}
                     />
                     <Button
                         title='Cancelar'

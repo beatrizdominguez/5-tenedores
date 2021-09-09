@@ -172,8 +172,20 @@ function Map(props) {
                             draggable
                         />
                     </MapView>
-                )
-                }
+                )}
+                <View style={styles.viewMapBtn}>
+                    <Button
+                        title='Guardar ubicación'
+                        containerStyle={styles.viewMapBtnContainerSave}
+                        buttonStyle={styles.viewMapBtnSave}
+                    />
+                    <Button
+                        title='Cancelar'
+                        containerStyle={styles.viewMapBtnContainerCancel}
+                        buttonStyle={styles.viewMapBtnCancel}
+                        onPressIn={() => setIsVisibleMap(false)}
+                    />
+                </View>
             </View>
         </Modal>
     );

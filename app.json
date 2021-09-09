@@ -20,6 +20,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.bdominguez.cincotenedores",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCl35awgvcdHhJUeujhwoNZBm"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

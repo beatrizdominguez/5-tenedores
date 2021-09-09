@@ -5,6 +5,7 @@ import { Icon } from "react-native-elements";
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import ListRestaurants from "../../components/Restaurants/ListRestaurants";
 
 const db = firebase.firestore(firebaseApp);
 
@@ -50,7 +51,9 @@ export default function Restaurants() {
 
     return (
         <View style={styles.viewBody}>
-            <Text>Restaurantes aqui</Text>
+            <ListRestaurants
+                restaurants={restaurants}
+            />
             {user && (
                 <Icon
                     reverse

@@ -26,6 +26,9 @@ export default function ListRestaurants(props) {
                             restaurant={restaurant}
                         ></Restaurant>
                     )}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={handleLoadMore}
+                    ListFooterComponent={<FooterList isLoading={isLoading} />}
                 />
             ) : (
                 <View style={styles.loaderRestaurants}>
@@ -64,12 +67,31 @@ function Restaurant(props) {
                     <Text style={styles.restaurantName}>{name}</Text>
                     <Text style={styles.restaurantAddress}>{address}</Text>
                     <Text style={styles.restaurantDescription}>
-                    {description.substr(0, 60)}...
+                        {description.substr(0, 60)}...
                     </Text>
                 </View>
             </View>
         </TouchableOpacity>
     )
+}
+
+
+function FooterList(props) {
+    const { isLoading } = props;
+
+    if (isLoading) {
+        return (
+            <View style={styles.loaderRestaurants}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.notFoundRestaurants}>
+                <Text>No quedan restaurantes por cargar</Text>
+            </View>
+        );
+    }
 }
 
 

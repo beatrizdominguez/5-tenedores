@@ -9,7 +9,7 @@ import ListRestaurants from "../../components/Restaurants/ListRestaurants";
 
 const db = firebase.firestore(firebaseApp);
 
-const limitRestaurants = 10
+const limitRestaurants = 9
 
 export default function Restaurants() {
     const [user, setUser] = useState(null)
@@ -17,6 +17,8 @@ export default function Restaurants() {
     const [restaurants, setRestaurants] = useState([])
     const [totalRestaurants, setTotalRestaurants] = useState(0)
     const [startRestaurant, setStartRestaurant] = useState(0)
+    const [isLoading, setIsLoading] = useState(false)
+
 
 
 
@@ -49,6 +51,32 @@ export default function Restaurants() {
             })
 
     }, [])
+
+    const handleLoadMore = () => {
+        const resultRestaurants = [];
+        restaurants.length < totalResaturants && setIsLoading(true);
+
+        db.collection("restaurants")
+            .orderBy("createAt", "desc")
+            .startAfter(startRestaurants.data().createAt)
+            .limit(limitRestaurants)
+            .get()
+            .then((response) => {
+                if (response.docs.length > 0) {
+                    setStartRestaurants(response.docs[response.docs.length - 1]);
+                } else {
+                    setIsLoading(false);
+                }
+
+                for (const doc of response.docs) {
+                    const restaurant = doc.data();
+                    restaurant.id = doc.id;
+                    resultRestaurants.push(restaurant);
+                }
+
+                setRestaurants([...restaurants, ...resultRestaurants])
+            })
+    }
 
     return (
         <View style={styles.viewBody}>

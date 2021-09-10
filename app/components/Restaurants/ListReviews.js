@@ -21,6 +21,21 @@ export default function ListReviews(props) {
     user ? setUserLogged(true) : setUserLogged(false);
   })
 
+  useEffect(() => {
+    db.collection("reviews")
+      .where("idRestaurant", "==", idRestaurant)
+      .get()
+      .then((response) => {
+        const resultReview = [];
+        response.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          resultReview.push(data);
+        });
+        setReviews(resultReview);
+      });
+  }, []);
+
   return (
     <View>
       {userLogged ? (
@@ -33,11 +48,11 @@ export default function ListReviews(props) {
             name: "square-edit-outline",
             color: "#00a680",
           }}
-        onPress={() =>
-          navigation.navigate("addReviewRestaurant", {
-            idRestaurant: idRestaurant,
-          })
-        }
+          onPress={() =>
+            navigation.navigate("addReviewRestaurant", {
+              idRestaurant: idRestaurant,
+            })
+          }
         />
       ) : (
         <View>

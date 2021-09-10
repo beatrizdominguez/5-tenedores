@@ -41,6 +41,12 @@ export default function AddReviewRestaurant(props) {
           inputContainerStyle={styles.textArea}
           onChange={(e) => setReview(e.nativeEvent.text)}
         />
+        <Button
+          title="Enviar Comnetario"
+          containerStyle={styles.btnContainer}
+          buttonStyle={styles.btn}
+        // onPress={addRevew}
+        />
       </View>
     </View>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
-import { Rating } from "react-native-elements";
+import { Rating, ListItem } from "react-native-elements";
+import { map } from 'lodash'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import Loading from "../../components/Loading"
 import Carousel from "../../components/Carousel"
@@ -85,6 +86,7 @@ function TitleRestaurant(props) {
 function RestaurantInfo(props) {
     const { location, name, address } = props;
 
+    // mocked image for tutorial purposes
     const listInfo = [
         {
             text: address,
@@ -112,7 +114,6 @@ function RestaurantInfo(props) {
                 Información sobre el restaurante
         </Text>
         <Map location={location} name={name} height={100} />
-            {/* 
         {map(listInfo, (item, index) => (
           <ListItem
             key={index}
@@ -124,7 +125,7 @@ function RestaurantInfo(props) {
             }}
             containerStyle={styles.containerListItem}
           />
-        ))} */}
+        ))}
         </View>
     );
 }

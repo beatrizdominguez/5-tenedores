@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import { Rating, ListItem } from "react-native-elements";
 import { map } from 'lodash'
+import { useFocusEffect } from "@react-navigation/native"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import Loading from "../../components/Loading"
 import Carousel from "../../components/Carousel"
@@ -28,18 +29,19 @@ export default function Restaurant(props) {
 
     navigation.setOptions({ title: name })
 
-    useEffect(() => {
-        db.collection('restaurants')
-            .doc(id)
-            .get()
-            .then((response) => {
-                const data = response.data()
-                data.id = response.id
-                setRestaurant(data)
-                setRating(data.rating)
-            })
-
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            db.collection("restaurants")
+                .doc(id)
+                .get()
+                .then((response) => {
+                    const data = response.data();
+                    data.id = response.id;
+                    setRestaurant(data);
+                    setRating(data.rating);
+                });
+        }, [])
+    );
 
     if (!restaurant) return <Loading isVisible={true} text='Cargando ...' />
 

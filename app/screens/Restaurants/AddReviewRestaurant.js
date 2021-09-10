@@ -15,6 +15,17 @@ export default function AddReviewRestaurant(props) {
   const [isLoading, setIsLoading] = useState(false);
   const toastRef = useRef();
 
+  const addReview = () => {
+    if (!rating) {
+      toastRef.current.show("No has dado ninguna putuacion");
+    } else if (!title) {
+      toastRef.current.show("El titulo es oblogatorio");
+    } else if (!review) {
+      toastRef.current.show("El comentatio es obligatorio");
+    } else {
+      console.log(ok)
+    }
+  }
 
   return (
     <View style={styles.viewBody}>
@@ -45,8 +56,9 @@ export default function AddReviewRestaurant(props) {
           title="Enviar Comnetario"
           containerStyle={styles.btnContainer}
           buttonStyle={styles.btn}
-        // onPress={addRevew}
+          onPress={addReview}
         />
+        <Toast ref={toastRef} position="center" opacity={0.9} />
       </View>
     </View>
   );

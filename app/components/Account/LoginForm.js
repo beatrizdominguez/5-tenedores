@@ -15,11 +15,14 @@ export default function LoginForm (props) {
     const [loading, setLoading] = useState(false);
     const navigation = useNavigation();
 
+    firebase.auth().onAuthStateChanged((user) => {
+      user && navigation.navigate('account');
+  });
+
 
     const onChange = (e, type) => {
         setFormData({ ...formData, [type]: e.nativeEvent.text });
       }
-
 
       const onSubmit = () => {
         if (isEmpty(formData.email) || isEmpty(formData.password)) {
@@ -33,7 +36,7 @@ export default function LoginForm (props) {
             .signInWithEmailAndPassword(formData.email, formData.password)
             .then(() => {
               setLoading(false);
-              navigation.navigate("account");
+              navigation.goBack()
             })
             .catch(() => {
               setLoading(false);

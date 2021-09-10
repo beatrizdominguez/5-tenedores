@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Image, Icon, Button } from "react-native-elements";
 import { size } from 'lodash'
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import Toast from "react-native-easy-toast";
 import Loading from "../components/Loading";
 
@@ -21,7 +21,6 @@ import "firebase/firestore";
 const db = firebase.firestore(firebaseApp);
 
 export default function Favorites(props) {
-    const { navigation } = props;
     const [restaurants, setRestaurants] = useState([]);
     const [userLogged, setUserLogged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -68,6 +67,10 @@ export default function Favorites(props) {
         return Promise.all(arrayRestaurants);
     };
 
+    if (!userLogged) {
+        return <UserNoLogged />;
+    }
+
     if (!restaurants) {
         return <Loading text="Cargando restaurantes" isVisible={isLoading} />
     } else if (size(restaurants) == 0) {
@@ -93,6 +96,25 @@ function NotFoundRestaurants() {
     );
 }
 
+
+function UserNoLogged(props) {
+    const navigation = useNavigation();
+    return (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <Icon type="material-community" name="alert-outline" size={50} />
+            <Text style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}>
+                Necesitas estar logeado para ver esta sección
+        </Text>
+            <Button
+                title="Ir al login"
+                containerStyle={{ marginTop: 20, width: "80%" }}
+                buttonStyle={{ backgroundColor: "#00a680" }}
+                // si quiero ir a una pantalla no principal de un stack, tengo que llamar al stack y  luego como props al login
+                onPress={() => navigation.navigate("account", { screen: "login" })}
+            />
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     viewBody: {

@@ -15,11 +15,20 @@ export default function AddReviewRestaurant(props) {
   const [isLoading, setIsLoading] = useState(false);
   const toastRef = useRef();
 
- 
+
   return (
     <View style={styles.viewBody}>
-        <Text>add review</Text>
-        <Text>{idRestaurant}</Text>
+      <View style={styles.viewRating}>
+        <AirbnbRating
+          count={5}
+          reviews={["Pésimo", "Deficiente", "Normal", "Muy Bueno", "Excelente"]}
+          defaultRating={0}
+          size={35}
+          onFinishRating={(value) => {
+            setRating(value);
+          }}
+        />
+      </View>
     </View>
   );
 }

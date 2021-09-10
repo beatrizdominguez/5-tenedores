@@ -29,6 +29,19 @@ export default function AddReviewRestaurant(props) {
           }}
         />
       </View>
+      <View style={styles.formReview}>
+        <Input
+          placeholder="Titulo"
+          containerStyle={styles.input}
+          onChange={(e) => setTitle(e.nativeEvent.text)}
+        />
+        <Input
+          placeholder="Comentario..."
+          multiline={true}
+          inputContainerStyle={styles.textArea}
+          onChange={(e) => setReview(e.nativeEvent.text)}
+        />
+      </View>
     </View>
   );
 }

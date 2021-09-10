@@ -21,6 +21,7 @@ import "firebase/firestore";
 const db = firebase.firestore(firebaseApp);
 
 export default function Favorites(props) {
+    const navigation = useNavigation();
     const [restaurants, setRestaurants] = useState([]);
     const [userLogged, setUserLogged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +69,7 @@ export default function Favorites(props) {
     };
 
     if (!userLogged) {
-        return <UserNoLogged />;
+        return <UserNoLogged navigation={navigation} />;
     }
 
     if (!restaurants) {
@@ -80,12 +81,21 @@ export default function Favorites(props) {
     }
 
     return (
-        <View>
+        <View style={styles.viewBody} >
             { restaurants ? (
-                <View style={styles.viewBody} >
-                    <Text>favs here</Text>
-                    <Toast ref={toastRef} position="center" opacity={0.9} />
-                </View>
+                <FlatList
+                    data={restaurants}
+                    renderItem={(restaurant) => (
+                        <Restaurant
+                            restaurant={restaurant}
+                            setIsLoading={setIsLoading}
+                            toastRef={toastRef}
+                            setReloadData={setReloadData}
+                            navigation={navigation}
+                        />
+                    )}
+                    keyExtractor={(item, index) => index.toString()}
+                />
             ) : (
                 <View style={styles.loaderRestaurants}>
                     <ActivityIndicator size="large" />
@@ -108,7 +118,7 @@ function NotFoundRestaurants() {
 }
 
 function UserNoLogged(props) {
-    const navigation = useNavigation();
+    const { navigation } = props
     return (
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <Icon type="material-community" name="alert-outline" size={50} />
@@ -124,6 +134,21 @@ function UserNoLogged(props) {
             />
         </View>
     );
+}
+
+function Restaurant(props) {
+    const {
+        restaurant,
+        setIsLoading,
+        toastRef,
+        setReloadData,
+        navigation,
+    } = props;
+    const { name } = restaurant.item
+
+    return (
+        <Text>{name}</Text>
+    )
 }
 
 const styles = StyleSheet.create({

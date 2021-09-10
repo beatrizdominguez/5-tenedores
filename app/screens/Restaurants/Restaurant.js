@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native"
 
 export default function Restaurant(props) {
-    const { navigation, route } = props;
+    const navigation = useNavigation()
+    const route = useRoute()
+
     const { id, name } = route.params;
     const [restaurant, setRestaurant] = useState(null);
     const [rating, setRating] = useState(0);
     const [isFavorite, setIsFavorite] = useState(false);
     const [userLogged, setUserLogged] = useState(false);
     const toastRef = useRef();
+
+    navigation.setOptions({title: name})
 
     return (
         <Text>{name}</Text>

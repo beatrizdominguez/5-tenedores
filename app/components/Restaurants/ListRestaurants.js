@@ -24,7 +24,6 @@ export default function ListRestaurants(props) {
                     renderItem={(restaurant) => (
                         <Restaurant
                             restaurant={restaurant}
-                            navigation={navigation}
                         ></Restaurant>
                     )}
                     onEndReachedThreshold={0.5}

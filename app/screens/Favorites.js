@@ -144,10 +144,41 @@ function Restaurant(props) {
         setReloadData,
         navigation,
     } = props;
-    const { name } = restaurant.item
+    const { id, name, images } = restaurant.item;
 
     return (
-        <Text>{name}</Text>
+        <View style={styles.restaurant}>
+            <TouchableOpacity
+                onPress={() =>
+                    navigation.navigate("restaurants", {
+                        screen: "restaurant",
+                        params: { id },
+                    })
+                }
+            >
+                <Image
+                    resizeMode="cover"
+                    style={styles.image}
+                    PlaceholderContent={<ActivityIndicator color="#fff" />}
+                    source={
+                        images[0]
+                            ? { uri: images[0] }
+                            : require("../../assets/img/no-image.png")
+                    }
+                />
+                <View style={styles.info}>
+                    <Text style={styles.name}>{name}</Text>
+                    <Icon
+                        type="material-community"
+                        name="heart"
+                        color="#f00"
+                        containerStyle={styles.favorite}
+                        // onPress={confirmRemoveFavorite}
+                        underlayColor="transparent"
+                    />
+                </View>
+            </TouchableOpacity>
+        </View>
     )
 }
 

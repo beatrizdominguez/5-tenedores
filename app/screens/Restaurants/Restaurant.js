@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native"
 import Loading from "../../components/Loading"
+import Carousel from "../../components/Carousel"
 
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
@@ -36,8 +37,15 @@ export default function Restaurant(props) {
     }, [])
 
     if (!restaurant) return <Loading isVisible={true} text='Cargando ...' />
+
     return (
-        <Text>{name}</Text>
+        <ScrollView style={styles.viewBody}>
+            <Carousel
+                arrayImages={restaurant.images}
+                height={250}
+                width={screenWidth}
+            />
+        </ScrollView>
     )
 }
 

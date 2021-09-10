@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, Avatar, Rating } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native"
 import { map } from "lodash";
 
 import { firebaseApp } from "../../utils/firebase"
@@ -10,7 +11,9 @@ import "firebase/firestore"
 const db = firebase.firestore(firebaseApp)
 
 export default function ListReviews(props) {
-  const { navigation, idRestaurant } = props;
+  const { idRestaurant } = props;
+  const navigation = useNavigation()
+
   const [userLogged, setUserLogged] = useState(false);
   const [reviews, setReviews] = useState([]);
 
@@ -20,13 +23,33 @@ export default function ListReviews(props) {
 
   return (
     <View>
-      <Text>list view</Text>
       {userLogged ? (
-        <Text>yes</Text>
+        <Button
+          title="Escribe una opinión"
+          buttonStyle={styles.btnAddReview}
+          titleStyle={styles.btnTitleAddReview}
+          icon={{
+            type: "material-community",
+            name: "square-edit-outline",
+            color: "#00a680",
+          }}
+        // onPress={() =>
+        //   navigation.navigate("add-review-restaurant", {
+        //     idRestaurant: idRestaurant,
+        //   })
+        // }
+        />
       ) : (
         <View>
-          <Text>Para escribir comentarios, tienes que estar logueado</Text>
-
+          <Text
+            style={{ textAlign: "center", color: "#00a680", padding: 20 }}
+            onPress={() => navigation.navigate("login")}
+          >
+            Para escribir un comentario es necesario estar logeado{" "}
+            <Text style={{ fontWeight: "bold" }}>
+              pulsa AQUÍ para iniciar sesión
+            </Text>
+          </Text>
         </View>
       )}
     </View>

@@ -48,6 +48,31 @@ export default function Restaurant(props) {
         }, [])
     );
 
+    const addFavorite = () => {
+        if (!userLogged) {
+            toastRef.current.show(
+                "Para usar el sistema de favoritos tienes que estar logeado"
+            );
+        } else {
+            const payload = {
+                idUser: firebase.auth().currentUser.uid,
+                idRestaurant: restaurant.id,
+            };
+
+            db.collection("favorites")
+                .add(payload)
+                .then(() => {
+                    setIsFavorite(true);
+                    toastRef.current.show("Restaurante añadido a favoritos");
+                })
+                .catch(() => {
+                    toastRef.current.show("Error al añadir el restaurnate a favoritos");
+                });
+        }
+    }
+
+    const removeFavorite = () => { }
+
     if (!restaurant) return <Loading isVisible={true} text='Cargando ...' />
 
     return (
@@ -56,8 +81,7 @@ export default function Restaurant(props) {
                 <Icon
                     type="material-community"
                     name={isFavorite ? "heart" : "heart-outline"}
-                    // onPress={isFavorite ? removeFavorite : addFavorite}
-                    onPress={() => setIsFavorite(!isFavorite)}
+                    onPress={isFavorite ? removeFavorite : addFavorite}
                     color={isFavorite ? "#f00" : "#000"}
                     size={35}
                     underlayColor="transparent"

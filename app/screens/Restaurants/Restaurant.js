@@ -4,6 +4,7 @@ import { Rating, ListItem, Icon } from "react-native-elements";
 import { map } from 'lodash'
 import { useFocusEffect } from "@react-navigation/native"
 import { useNavigation, useRoute } from "@react-navigation/native"
+import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading"
 import Carousel from "../../components/Carousel"
 import Map from "../../components/Map"
@@ -29,6 +30,10 @@ export default function Restaurant(props) {
 
     navigation.setOptions({ title: name })
 
+    firebase.auth().onAuthStateChanged((user) => {
+        user ? setUserLogged(true) : setUserLogged(false);
+    });
+
     useFocusEffect(
         useCallback(() => {
             db.collection("restaurants")
@@ -52,6 +57,7 @@ export default function Restaurant(props) {
                     type="material-community"
                     name={isFavorite ? "heart" : "heart-outline"}
                     // onPress={isFavorite ? removeFavorite : addFavorite}
+                    onPress={() => setIsFavorite(!isFavorite)}
                     color={isFavorite ? "#f00" : "#000"}
                     size={35}
                     underlayColor="transparent"
@@ -75,6 +81,7 @@ export default function Restaurant(props) {
             <ListReviews
                 idRestaurant={id}
             />
+            <Toast ref={toastRef} position="center" opacity={0.9} />
         </ScrollView>
     )
 }

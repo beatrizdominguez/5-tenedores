@@ -73,15 +73,26 @@ export default function Favorites(props) {
 
     if (!restaurants) {
         return <Loading text="Cargando restaurantes" isVisible={isLoading} />
-    } else if (size(restaurants) == 0) {
-        return <NotFoundRestaurants />
+    }
+
+    if (restaurants?.length === 0) {
+        return <NotFoundRestaurants />;
     }
 
     return (
-        <View style={styles.viewBody}>
-            <Text>favs here</Text>
-            <Toast ref={toastRef} position="center" opacity={0.9} />
-        </View>
+        <View>
+            { restaurants ? (
+                <View style={styles.viewBody} >
+                    <Text>favs here</Text>
+                    <Toast ref={toastRef} position="center" opacity={0.9} />
+                </View>
+            ) : (
+                <View style={styles.loaderRestaurants}>
+                    <ActivityIndicator size="large" />
+                    <Text style={{ textAlign: "center" }}>Cargando restaurantes</Text>
+                </View>
+            )}
+        </View >
     );
 }
 
@@ -95,7 +106,6 @@ function NotFoundRestaurants() {
         </View>
     );
 }
-
 
 function UserNoLogged(props) {
     const navigation = useNavigation();

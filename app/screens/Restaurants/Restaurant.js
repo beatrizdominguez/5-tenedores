@@ -4,6 +4,7 @@ import { Rating } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native"
 import Loading from "../../components/Loading"
 import Carousel from "../../components/Carousel"
+import Map from "../../components/Map"
 
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
@@ -52,6 +53,11 @@ export default function Restaurant(props) {
                 description={restaurant.description}
                 rating={restaurant.rating}
             />
+            <RestaurantInfo
+                location={restaurant.location}
+                name={restaurant.name}
+                address={restaurant.address}
+            />
         </ScrollView>
     )
 }
@@ -71,6 +77,54 @@ function TitleRestaurant(props) {
                 />
             </View>
             <Text style={styles.descriptionRestaurant}>{description}</Text>
+        </View>
+    );
+}
+
+
+function RestaurantInfo(props) {
+    const { location, name, address } = props;
+
+    const listInfo = [
+        {
+            text: address,
+            iconName: "map-marker",
+            iconType: "material-community",
+            action: null,
+        },
+        {
+            text: "111 222 333",
+            iconName: "phone",
+            iconType: "material-community",
+            action: null,
+        },
+        {
+            text: "xAgustin93@gmail.com",
+            iconName: "at",
+            iconType: "material-community",
+            action: null,
+        },
+    ];
+
+    return (
+        <View style={styles.viewRestaurantInfo}>
+            <Text style={styles.restaurantInfoTitle}>
+                Información sobre el restaurante
+        </Text>
+        <Map location={location} name={name} height={100} />
+            {/* 
+        {map(listInfo, (item, index) => (
+          <ListItem
+            key={index}
+            title={item.text}
+            leftIcon={{
+              name: item.iconName,
+              type: item.iconType,
+              color: "#00a680",
+            }}
+            containerStyle={styles.containerListItem}
+          />
+        ))} */}
         </View>
     );
 }

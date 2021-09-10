@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import Loading from "../../components/Loading"
 import Carousel from "../../components/Carousel"
 import Map from "../../components/Map"
+import ListReviews from "./../../components/Restaurants/ListReviews"
 
 import { firebaseApp } from "../../utils/firebase";
 import firebase from "firebase/app";
@@ -59,6 +60,7 @@ export default function Restaurant(props) {
                 name={restaurant.name}
                 address={restaurant.address}
             />
+            <ListReviews />
         </ScrollView>
     )
 }

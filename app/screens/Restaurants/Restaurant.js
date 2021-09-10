@@ -85,7 +85,32 @@ export default function Restaurant(props) {
         }
     }
 
-    const removeFavorite = () => { }
+    const removeFavorite = () => {
+        // tengo que pedir primero el id del documento de favorites para poder actualizarlo (borarrlo)
+        // no puedo hacerlo directamente con un where?
+        // sino puedo guardarlo en un estado, y si lo tengo lo uso, sino pido, solo sería buna opcion si le da seguido a añadir quitar y demás, si le da cuando vuelve a la pag no tiene sentido
+        db.collection("favorites")
+            .where("idRestaurant", "==", restaurant.id)
+            .where("idUser", "==", firebase.auth().currentUser.uid)
+            .get()
+            .then((response) => {
+                response.forEach((doc) => {
+                    const idFavorite = doc.id;
+                    db.collection("favorites")
+                        .doc(idFavorite)
+                        .delete()
+                        .then(() => {
+                            setIsFavorite(false);
+                            toastRef.current.show("Restaurante eliminado de favoritos");
+                        })
+                        .catch(() => {
+                            toastRef.current.show(
+                                "Error al eliminar el restaurante de favoritos"
+                            );
+                        });
+                });
+            });
+    }
 
     if (!restaurant) return <Loading isVisible={true} text='Cargando ...' />
 

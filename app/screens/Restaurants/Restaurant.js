@@ -60,7 +60,9 @@ export default function Restaurant(props) {
                 name={restaurant.name}
                 address={restaurant.address}
             />
-            <ListReviews />
+            <ListReviews
+                idRestaurant={id}
+            />
         </ScrollView>
     )
 }
@@ -115,19 +117,19 @@ function RestaurantInfo(props) {
             <Text style={styles.restaurantInfoTitle}>
                 Información sobre el restaurante
         </Text>
-        <Map location={location} name={name} height={100} />
-        {map(listInfo, (item, index) => (
-          <ListItem
-            key={index}
-            title={item.text}
-            leftIcon={{
-              name: item.iconName,
-              type: item.iconType,
-              color: "#00a680",
-            }}
-            containerStyle={styles.containerListItem}
-          />
-        ))}
+            <Map location={location} name={name} height={100} />
+            {map(listInfo, (item, index) => (
+                <ListItem
+                    key={index}
+                    title={item.text}
+                    leftIcon={{
+                        name: item.iconName,
+                        type: item.iconType,
+                        color: "#00a680",
+                    }}
+                    containerStyle={styles.containerListItem}
+                />
+            ))}
         </View>
     );
 }

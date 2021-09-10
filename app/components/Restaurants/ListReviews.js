@@ -33,11 +33,11 @@ export default function ListReviews(props) {
             name: "square-edit-outline",
             color: "#00a680",
           }}
-        // onPress={() =>
-        //   navigation.navigate("add-review-restaurant", {
-        //     idRestaurant: idRestaurant,
-        //   })
-        // }
+        onPress={() =>
+          navigation.navigate("addReviewRestaurant", {
+            idRestaurant: idRestaurant,
+          })
+        }
         />
       ) : (
         <View>

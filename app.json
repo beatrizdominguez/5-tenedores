@@ -41,6 +41,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Tutorial application for react native de Udemy (https://www.udemy.com/course/react-native-expo-creando-mini-tripadvisor-de-restaurantes/)",
+    "githubUrl": "https://github.com/beatrizdominguez/5-tenedores"
   }
 }

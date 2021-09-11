@@ -40,7 +40,7 @@ export default function Restaurants() {
                 }
                 setRestaurants(resultRestaurants)
             })
-    }))
+    }, []))
 
 
     useEffect(() => {

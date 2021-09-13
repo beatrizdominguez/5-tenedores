@@ -57,11 +57,11 @@ export default function Favorites(props) {
                             });
                             setRestaurants(restuarants);
                         });
-                    });
+                        triggerReload()
+                    })
             }
-            triggerReload()
         }, [userLogged, reloadData])
-    );
+    )
 
     const getDataRestaurant = (idRestaurantsArray) => {
         const arrayRestaurants = [];
